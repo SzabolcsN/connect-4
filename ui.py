@@ -32,6 +32,12 @@ class Connect4UI:
         tk.Label(player2_frame, text="● Player 2 (Yellow):", fg="gold", font=("Arial", 10, "bold")).pack(side="left")
         tk.OptionMenu(player2_frame, self.bot2_var, *self.options).pack(side="left")
 
+        time_frame = tk.Frame(self.ui_frame)
+        time_frame.grid(row=3, column=0, pady=5)
+        tk.Label(time_frame, text="⏱ Time per move (sec):", font=("Arial", 10)).pack(side="left")
+        self.time_limit_var = tk.DoubleVar(value=2.0)
+        tk.Spinbox(time_frame, from_=0.1, to=10.0, increment=0.1, textvariable=self.time_limit_var, width=5).pack(side="left")
+
         button_frame = tk.Frame(self.ui_frame)
         button_frame.grid(row=2, column=0, pady=10)
         tk.Button(button_frame, text="▶ Play", command=self.start_game, width=10).pack(side="left", padx=5)
@@ -76,7 +82,8 @@ class Connect4UI:
             create_player(self.bot1_var.get(), 1),
             create_player(self.bot2_var.get(), 2)
         ]
-        self.game = Game(*self.players)
+        time_limit = self.time_limit_var.get()
+        self.game = Game(*self.players, time_limit=time_limit)
         self.draw_board()
 
         def run():
