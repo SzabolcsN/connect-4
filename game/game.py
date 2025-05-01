@@ -1,7 +1,7 @@
 from game.board import Board
 
 class Game:
-    def __init__(self, player1, player2, time_limit=2.0):
+    def __init__(self, player1, player2, time_limit):
         self.board = Board()
         self.players = [player1, player2]
         self.current_turn = 0

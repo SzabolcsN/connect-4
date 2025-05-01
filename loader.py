@@ -1,6 +1,7 @@
 import importlib.util
 import os
 from game.player import Player
+from game.player import ExecutableBot
 
 def load_bot(path):
     spec = importlib.util.spec_from_file_location("bot_module", path)
@@ -13,7 +14,6 @@ def discover_executables(directory):
     for filename in os.listdir(directory):
         path = os.path.join(directory, filename)
         if os.path.isfile(path) and os.access(path, os.X_OK):
-            from game.player import ExecutableBot
             bots.append((f"[Exec] {filename}", lambda name, pid, p=path: ExecutableBot(name, pid, p)))
     return bots
 

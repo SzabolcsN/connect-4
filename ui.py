@@ -98,9 +98,10 @@ class Connect4UI:
                 if result:
                     self.canvas.create_text(350, 300, text=result, fill="white", font=("Arial", 32))
                     break
-                time.sleep(0.5)
+                time.sleep(0.1)
 
-        threading.Thread(target=run).start()
+        game_thread = threading.Thread(target=run)
+        game_thread.start()
 
     def reset_ui(self):
         self.game = None

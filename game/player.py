@@ -1,45 +1,43 @@
 import subprocess
 import json
-import time
+
 
 class Player:
     def __init__(self, name, player_id):
         self.name = name
         self.player_id = player_id
 
-    def get_move(self, board_state, time_limit=None):
+    def get_move(self, board_state):
         raise NotImplementedError
 
 
 class HumanPlayer(Player):
     def __init__(self, name, player_id):
         super().__init__(name, player_id)
-        
-        
+
+
 class ExecutableBot(Player):
-    def __init__(self, name, player_id, path, time_limit=2.0):
+    def __init__(self, name, player_id, path):
         super().__init__(name, player_id)
         self.path = path
-        self.time_limit = time_limit  # seconds
 
-    def get_move(self, board_state):
+    def get_move(self, board_state, time_limit):
         try:
             input_data = {
                 "board": board_state,
                 "player_id": self.player_id,
-                "time_limit": int(self.time_limit * 1000)  # milliseconds
+                "time_limit": int(time_limit * 1000),  # milliseconds
             }
-            start_time = time.time()
-
             result = subprocess.run(
                 [self.path],
                 input=json.dumps(input_data),
                 capture_output=True,
                 text=True,
-                timeout=self.time_limit
+                timeout=time_limit
+                + 150,  # Alapbol kell egy kis ido a beinditashoz
             )
-
-            elapsed = time.time() - start_time
+            print(result.stdout.strip())
+            print(result.stderr)
             move = int(result.stdout.strip())
             return move
 
